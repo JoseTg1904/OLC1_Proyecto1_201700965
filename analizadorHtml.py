@@ -46,31 +46,31 @@ def analizar(contenido, path):
                 fila += 1
                 columna = 0
                 contenidoSalida += contenido[i]
-                ventana.pintarHTML("\n","otro")
+                ventana.pintar("\n","otro")
             elif contenido[i] == "<":
                 estado = 0
                 contenidoSalida += contenido[i]
-                ventana.pintarHTML("<","operador")
+                ventana.pintar("<","operador")
             elif contenido[i] == ">":
                 contenidoSalida += contenido[i]
                 lexemaAuxiliar = ""
                 estado = 3
-                ventana.pintarHTML(">","operador")
+                ventana.pintar(">","operador")
             elif contenido[i] == "=":
                 estado = 0
                 contenidoSalida += contenido[i]
-                ventana.pintarHTML("=","operador")
+                ventana.pintar("=","operador")
             elif contenido[i] == "/":
                 estado = 0
                 contenidoSalida += contenido[i]
-                ventana.pintarHTML("/","otro")
+                ventana.pintar("/","otro")
             elif contenido[i] == " ":
                 estado = 0
                 contenidoSalida += contenido[i]
-                ventana.pintarHTML(" ","otro")
-            elif contenido[i] == "\"" or contenido[i] == "\'":
+                ventana.pintar(" ","otro")
+            elif contenido[i] == "\"" or contenido[i] == "\'" or contenido[i] == "‘" or contenido[i] == "“":
                 estado = 4
-                ventana.pintarHTML(contenido[i],"otro")
+                ventana.pintar(contenido[i],"otro")
                 contenidoSalida += contenido[i]
                 lexemaAuxiliar = ""
             elif contenido[i].isalpha():
@@ -88,133 +88,133 @@ def analizar(contenido, path):
             else: 
                 if lexemaAuxiliar.lower() == "html":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0 
                     i -= 1
                 elif lexemaAuxiliar.lower() == "head":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "title":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "body":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "p":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "img":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "src":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "a":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "href":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "ul":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "li":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "style":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "table":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "th":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "tr":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "td":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "caption":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "colgroup":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "col":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "thead":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "tbody":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
                 elif lexemaAuxiliar.lower() == "tfoot":
                     contenidoSalida += lexemaAuxiliar
-                    ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                    ventana.pintar(lexemaAuxiliar,"reservada")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
@@ -225,37 +225,37 @@ def analizar(contenido, path):
         elif estado == 2:
             if lexemaAuxiliar.lower() == "h1":
                 contenidoSalida += lexemaAuxiliar
-                ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                ventana.pintar(lexemaAuxiliar,"reservada")
                 lexemaAuxiliar = ""
                 estado = 0
                 i -= 1
             elif lexemaAuxiliar.lower() == "h2":
                 contenidoSalida += lexemaAuxiliar
-                ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                ventana.pintar(lexemaAuxiliar,"reservada")
                 lexemaAuxiliar = ""
                 estado = 0
                 i -= 1
             elif lexemaAuxiliar.lower() == "h3":
                 contenidoSalida += lexemaAuxiliar
-                ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                ventana.pintar(lexemaAuxiliar,"reservada")
                 lexemaAuxiliar = ""
                 estado = 0
                 i -= 1    
             elif lexemaAuxiliar.lower() == "h4":
                 contenidoSalida += lexemaAuxiliar
-                ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                ventana.pintar(lexemaAuxiliar,"reservada")
                 lexemaAuxiliar = ""
                 estado = 0
                 i -= 1
             elif lexemaAuxiliar.lower() == "h5":
                 contenidoSalida += lexemaAuxiliar
-                ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                ventana.pintar(lexemaAuxiliar,"reservada")
                 lexemaAuxiliar = ""
                 estado = 0
                 i -= 1
             elif lexemaAuxiliar.lower() == "h6":
                 contenidoSalida += lexemaAuxiliar
-                ventana.pintarHTML(lexemaAuxiliar,"reservada")
+                ventana.pintar(lexemaAuxiliar,"reservada")
                 lexemaAuxiliar = ""
                 estado = 0
                 i -= 1
@@ -268,7 +268,7 @@ def analizar(contenido, path):
                 estado = 0
                 i -= 1
                 contenidoSalida += lexemaAuxiliar
-                ventana.pintarHTML(lexemaAuxiliar,"entreEtiquetas")
+                ventana.pintar(lexemaAuxiliar,"entreEtiquetas")
                 lexemaAuxiliar = ""
             else:
                 estado = 3
@@ -278,8 +278,8 @@ def analizar(contenido, path):
                 estado = 0
                 contenidoSalida += lexemaAuxiliar
                 contenidoSalida += contenido[i]
-                ventana.pintarHTML(lexemaAuxiliar,"otro")
-                ventana.pintarHTML(contenido[i],"otro")
+                ventana.pintar(lexemaAuxiliar,"otro")
+                ventana.pintar(contenido[i],"otro")
                 lexemaAuxiliar = ""
             else:
                 estado = 4

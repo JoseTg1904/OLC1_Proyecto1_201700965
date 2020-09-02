@@ -24,7 +24,7 @@ def mostrarVentana():
     navbar = Menu(ventana)
     
     #agregando las opciones al menu
-    navbar.add_command(label = "Nuevo")
+    navbar.add_command(label = "Nuevo", command = limpiar)
     navbar.add_command(label = "Abrir", command = abrirArchivo)
     navbar.add_command(label = "Guardar")
     navbar.add_command(label = "Guardar como")
@@ -35,12 +35,11 @@ def mostrarVentana():
     ventana.config(menu = navbar)
     
     #instancia de la caja de texto  
-    cajaDeTexto.grid(row = 1000, column = 1000)
-    cajaDeTexto.place(x = 5, y = 0)
-    
+    cajaDeTexto.grid(row = 100, column = 100)
+    cajaDeTexto.place(x = 5, y = 0)  
 
     #instancia de la consola de salida
-    consola.grid(row = 1000, column = 1000)
+    consola.grid(row = 100, column = 100)
     consola.place(x = 743, y=0)
 
     #mostrando la ventana
@@ -55,16 +54,22 @@ def abrirArchivo():
 
         #validacion de ejecucion del tipo de analizador correspondiente al archivo
         if desicion[1].lower() == "html":
+            limpiar()
             obtenerContenido(path)
-            cajaDeTexto.insert(INSERT,"")
         elif desicion[1].lower() == "css":
+            limpiar()
             obtenerContenidoCSS(path)
         elif desicion[1].lower() == "js":
+            limpiar()
             print("js")
     else:
         messagebox.showerror("Error","Debe de seleccionar un archivo para ser analizado")
 
-def pintarHTML(contenido, identificador):
+def limpiar():
+    cajaDeTexto.delete("1.0","end")
+    consola.delete("1.0","end")
+
+def pintar(contenido, identificador):
     cajaDeTexto.insert(INSERT, contenido, identificador)
     cajaDeTexto.tag_config('entreEtiquetas', foreground = "black")
     cajaDeTexto.tag_config('reservada', foreground = "red")
@@ -74,3 +79,23 @@ def pintarHTML(contenido, identificador):
     cajaDeTexto.tag_config('comentario', foreground = "gray")
     cajaDeTexto.tag_config('intBoolean', foreground = "blue")
     cajaDeTexto.tag_config('operador', foreground = "orange")
+
+def mostrarRecorrido(listadoTokens):
+    consola.insert(INSERT,"|---------------Reporte de tokens----------------|\n")
+    insercion = ""
+    iterador = 1
+    for i in listadoTokens:
+        insercion += str(iterador)+". Token: "+i.tipoToken+" Valor: "+i.valor+" Recorrido: "+i.recorrido+"\n"
+        consola.insert(INSERT,insercion)
+        insercion = ""
+        iterador += 1
+
+def mostrarErrores(listadoErrores):
+    consola.insert(INSERT,"\n|---------------Reporte de errores----------------|\n")
+    insercion = ""
+    iterador = 1
+    for i in listadoErrores:
+        insercion += str(iterador)+". Fila: "+str(i.fila)+" Columna: "+str(i.columna)+" Error: "+i.error+"\n"
+        consola.insert(INSERT,insercion)
+        insercion = ""
+        iterador += 1
