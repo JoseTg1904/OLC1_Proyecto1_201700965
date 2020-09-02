@@ -1,3 +1,3 @@
-from ventana import *
+from ventana import mostrarVentana
 
 mostrarVentana()

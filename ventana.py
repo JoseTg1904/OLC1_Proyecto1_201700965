@@ -1,14 +1,17 @@
 import os 
-import platform
 
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
 from analizadorHtml import obtenerContenido
+from analizadorCSS import obtenerContenidoCSS
 
 
 #inicializacion del objeto que contiene la ventana
 ventana = Tk()
+
+cajaDeTexto = Text(ventana,height = 52, width = 90)
+consola = Text(ventana,height = 52, width = 93)
 
 def mostrarVentana():
     #asignacion de tamaño de la ventana
@@ -31,6 +34,15 @@ def mostrarVentana():
     #asignando el menu a la ventana
     ventana.config(menu = navbar)
     
+    #instancia de la caja de texto  
+    cajaDeTexto.grid(row = 1000, column = 1000)
+    cajaDeTexto.place(x = 5, y = 0)
+    
+
+    #instancia de la consola de salida
+    consola.grid(row = 1000, column = 1000)
+    consola.place(x = 743, y=0)
+
     #mostrando la ventana
     ventana.mainloop()
 
@@ -44,9 +56,21 @@ def abrirArchivo():
         #validacion de ejecucion del tipo de analizador correspondiente al archivo
         if desicion[1].lower() == "html":
             obtenerContenido(path)
+            cajaDeTexto.insert(INSERT,"")
         elif desicion[1].lower() == "css":
-            print("css")
+            obtenerContenidoCSS(path)
         elif desicion[1].lower() == "js":
             print("js")
     else:
         messagebox.showerror("Error","Debe de seleccionar un archivo para ser analizado")
+
+def pintarHTML(contenido, identificador):
+    cajaDeTexto.insert(INSERT, contenido, identificador)
+    cajaDeTexto.tag_config('entreEtiquetas', foreground = "black")
+    cajaDeTexto.tag_config('reservada', foreground = "red")
+    cajaDeTexto.tag_config('variable', foreground = "green")
+    cajaDeTexto.tag_config('otro', foreground = "black")
+    cajaDeTexto.tag_config('stringChar', foreground = "yellow")
+    cajaDeTexto.tag_config('comentario', foreground = "gray")
+    cajaDeTexto.tag_config('intBoolean', foreground = "blue")
+    cajaDeTexto.tag_config('operador', foreground = "orange")

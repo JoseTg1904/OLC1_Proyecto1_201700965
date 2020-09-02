@@ -1,15 +1,15 @@
-#import platform
+import platform
 
 from errorLexico import ErrorLexico
 from token import Token
 
-def obtenerContenidoCSS(path):
+def obtenerContenidoJS(path):
     archivo = open(path,"r")
 
     path1 = archivo.readline()
     path2 = archivo.readline()
     
-    """
+
     if platform.system() == "Linux":
         aux = path1 
         if aux.lower().find("pathl") != -1:
@@ -34,8 +34,7 @@ def obtenerContenidoCSS(path):
             pathSalida = path2[pos:len(path2)]
 
     pathSalida = pathSalida.strip(" ")
-    """
-    pathSalida = ""
+
     contenidoEntrada = ""
     for linea in archivo.readlines():
         contenidoEntrada += linea
