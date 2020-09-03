@@ -132,9 +132,11 @@ def analizar(contenido, path):
             if contenido[i] == "*":
                 estado = 2
                 lexemaAuxiliar += contenido[i]
-            else:
-                estado = 1
-                lexemaAuxiliar += contenido[i]
+            else:                
+                estado = 0
+                listadoErrores.append(ErrorLexico("/",fila,columna-1))
+                lexemaAuxiliar = ""
+                i -= 1
         elif estado == 2:
             if contenido[i] == "*":
                 estado = 3
@@ -149,8 +151,8 @@ def analizar(contenido, path):
                 ventana.pintar(lexemaAuxiliar,"comentario")
                 lexemaAuxiliar = ""
             else:
-                estado = 3
-                lexemaAuxiliar += contenido[i]
+                estado = 2
+                i -= 1
         elif estado == 4:
             if contenido[i] == "-" or contenido[i].isalpha() or contenido[i].isdigit():
                 lexemaAuxiliar += contenido[i]

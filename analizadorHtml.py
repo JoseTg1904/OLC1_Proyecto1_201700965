@@ -23,7 +23,6 @@ def obtenerContenido(path):
 
     pathSalida = pathSalida.strip(" ")
     
-    #pathSalida = ""
     contenidoEntrada = ""
     for linea in archivo.readlines():
         contenidoEntrada += linea

@@ -103,3 +103,5 @@ def mostrarErrores(listadoErrores):
         insercion = ""
         iterador += 1
 
+def obtenerPathLinux(linea1, linea2):
+    pass

@@ -33,12 +33,10 @@ def obtenerContenidoJS(path):
 def analizar(contenido, path):
     contenidoSalida = ""
     lexemaAuxiliar = ""
-    recorrido = ""
     fila = 0
     columna = 0
     estado = 0
     listadoErrores = []
-    listadoTokens = []
 
     i = 0
     while i < len(contenido):
@@ -172,8 +170,8 @@ def analizar(contenido, path):
                 ventana.pintar(lexemaAuxiliar,"comentario")
                 lexemaAuxiliar = ""
             else:
-                estado = 4
-                lexemaAuxiliar += contenido[i]
+                estado = 3
+                i -= 1
         elif estado == 5:
             if contenido[i].isalpha() or contenido[i].isdigit() or contenido[i] == "_":
                 lexemaAuxiliar += contenido[i]
