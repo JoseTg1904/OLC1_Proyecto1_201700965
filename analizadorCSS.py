@@ -52,7 +52,7 @@ def analizar(contenido, path):
                 listadoTokens.append(Token("tk_saltoLinea","0"," "))
             elif contenido[i] == "/":
                 estado = 1
-                ventana.pintar("/","comentario")
+                lexemaAuxiliar += contenido[i]
             elif contenido[i] == "{":
                 estado = 0
                 contenidoSalida += contenido[i]
@@ -131,26 +131,26 @@ def analizar(contenido, path):
         elif estado == 1:
             if contenido[i] == "*":
                 estado = 2
-                ventana.pintar("*","comentario")
+                lexemaAuxiliar += contenido[i]
             else:
                 estado = 1
-                listadoErrores.append(ErrorLexico(contenido[i],fila,columna))
+                lexemaAuxiliar += contenido[i]
         elif estado == 2:
             if contenido[i] == "*":
                 estado = 3
-                ventana.pintar(lexemaAuxiliar,"comentario")
-                ventana.pintar("*","comentario")
-                lexemaAuxiliar = ""
+                lexemaAuxiliar += contenido[i]
             else:
                 lexemaAuxiliar += contenido[i]
                 estado = 2
         elif estado == 3:
             if contenido[i] == "/":
                 estado = 0
-                ventana.pintar("/","comentario")
+                lexemaAuxiliar += contenido[i]
+                ventana.pintar(lexemaAuxiliar,"comentario")
+                lexemaAuxiliar = ""
             else:
                 estado = 3
-                listadoErrores.append(ErrorLexico(contenido[i],fila,columna))
+                lexemaAuxiliar += contenido[i]
         elif estado == 4:
             if contenido[i] == "-" or contenido[i].isalpha() or contenido[i].isdigit():
                 lexemaAuxiliar += contenido[i]
