@@ -5,7 +5,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from analizadorHtml import obtenerContenido
 from analizadorCSS import obtenerContenidoCSS
-
+from analizadorJS import obtenerContenidoJS
 
 #inicializacion del objeto que contiene la ventana
 ventana = Tk()
@@ -47,7 +47,7 @@ def mostrarVentana():
 
 def abrirArchivo():
     #abriendo un seleccionador de archivos
-    path = filedialog.askopenfilename(title = "Seleccione el archivo a analizar", filetypes = [("archivos de analisis","*.html *.js *.css")]) 
+    path = filedialog.askopenfilename(title = "Seleccione el archivo a analizar", filetypes = [("archivos de analisis","*.html *.js *.css *.rmt")]) 
     if path != ():
         #obtencion de la extension del archivo
         desicion = os.path.basename(path).split(".")
@@ -61,7 +61,10 @@ def abrirArchivo():
             obtenerContenidoCSS(path)
         elif desicion[1].lower() == "js":
             limpiar()
-            print("js")
+            obtenerContenidoJS(path)
+        elif desicion[1].lower() == "rmt":
+            limpiar()
+            print("sintactico")
     else:
         messagebox.showerror("Error","Debe de seleccionar un archivo para ser analizado")
 
@@ -75,10 +78,10 @@ def pintar(contenido, identificador):
     cajaDeTexto.tag_config('reservada', foreground = "red")
     cajaDeTexto.tag_config('variable', foreground = "green")
     cajaDeTexto.tag_config('otro', foreground = "black")
-    cajaDeTexto.tag_config('stringChar', foreground = "yellow")
+    cajaDeTexto.tag_config('stringChar', foreground = "gold")
     cajaDeTexto.tag_config('comentario', foreground = "gray")
     cajaDeTexto.tag_config('intBoolean', foreground = "blue")
-    cajaDeTexto.tag_config('operador', foreground = "orange")
+    cajaDeTexto.tag_config('operador', foreground = "DarkOrange1")
 
 def mostrarRecorrido(listadoTokens):
     consola.insert(INSERT,"|---------------Reporte de tokens----------------|\n")
@@ -99,3 +102,4 @@ def mostrarErrores(listadoErrores):
         consola.insert(INSERT,insercion)
         insercion = ""
         iterador += 1
+

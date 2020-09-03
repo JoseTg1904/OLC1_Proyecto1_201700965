@@ -42,7 +42,6 @@ def analizar(contenido, path):
     i = 0
     while i < len(contenido):
         columna += 1
-        #estado 7 es de las comillas revisar que no este como el de html
         if estado == 0:
             if contenido[i] == "\n":
                 estado = 0
@@ -50,6 +49,7 @@ def analizar(contenido, path):
                 columna = 0
                 contenidoSalida += contenido[i]
                 ventana.pintar("\n","otro")
+                listadoTokens.append(Token("tk_saltoLinea","0"," "))
             elif contenido[i] == "/":
                 estado = 1
                 ventana.pintar("/","comentario")
@@ -151,7 +151,6 @@ def analizar(contenido, path):
             else:
                 estado = 3
                 listadoErrores.append(ErrorLexico(contenido[i],fila,columna))
-        #aqui estan las reservadas
         elif estado == 4:
             if contenido[i] == "-" or contenido[i].isalpha() or contenido[i].isdigit():
                 lexemaAuxiliar += contenido[i]
