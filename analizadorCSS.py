@@ -592,9 +592,4 @@ def analizar(contenido, path):
     ventana.mostrarRecorrido(listadoTokens)
     ventana.mostrarErrores(listadoErrores)
     ventana.reporteDeErroresTabla(listadoErrores, "/ErroresLexicosCSS.html")
-    generarArchivoSalida(contenidoSalida, path)
-
-
-def generarArchivoSalida(contenido, path):
-    archivo = open(path,"w")
-    archivo.write(contenido)
+    ventana.guardarArchivoAnalizado(contenidoSalida)

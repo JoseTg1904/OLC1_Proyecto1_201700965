@@ -272,8 +272,4 @@ def analizar(contenido, path):
         i += 1
 
     ventana.reporteDeErroresTabla(listadoErrores, "/ErroresLexicosHTML.html")
-    generarArchivoSalida(contenidoSalida, path)
-
-def generarArchivoSalida(contenido, path):
-    archivo = open(path,"w")
-    archivo.write(contenido)
+    ventana.guardarArchivoAnalizado(contenidoSalida)

@@ -362,7 +362,7 @@ def analizar(contenido, path):
 
     graficoAFD(dot)
     ventana.reporteDeErroresTabla(listadoErrores, "/ErroresLexicosJS.html")
-    generarArchivoSalida(contenidoSalida, path)
+    ventana.guardarArchivoAnalizado(contenidoSalida)
 
 def graficoAFD(entrada):
     pathDot = ventana.obtenerDirectorioActual() + "/grafoJS.dot"
@@ -373,7 +373,3 @@ def graficoAFD(entrada):
     comando = "dot " + pathDot + " -Tpng -o " + pathImagen
     os.system(comando)
     ventana.abrirReporte(pathImagen)
-
-def generarArchivoSalida(contenido, path):
-    archivo = open(path,"w")
-    archivo.write(contenido)

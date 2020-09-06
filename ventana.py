@@ -174,5 +174,10 @@ def reporteDeErroresTabla(listado, tipo):
     archivo.close()
     abrirReporte(pathSalida)
 
+def guardarArchivoAnalizado(contenido):
+    archivo = open(pathSalidaLinux,"w")
+    archivo.write(contenido)
+    archivo.close()
+
 def abrirReporte(path):
     webbrowser.open(path)
