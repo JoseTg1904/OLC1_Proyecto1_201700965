@@ -6,23 +6,9 @@ from tokenLexico import Token
 def obtenerContenidoCSS(path):
     archivo = open(path,"r")
 
-    path1 = archivo.readline()
-    path2 = archivo.readline()
-    
-    aux = path1 
-    if aux.lower().find("pathl") != -1:
-        pos = aux.lower().find("pathl")
-        pos = pos + 6
-        pathSalida = path1[pos:len(path1)]
-    else:
-        aux = path2
-        pos = aux.lower().find("pathl")
-        pos = pos + 6
-        pathSalida = path2[pos:len(path2)]
+    ventana.obtenerPathSalidaLinux(archivo.readline(), archivo.readline())
 
-    pathSalida = pathSalida.rstrip("\n")
-    pathSalida = pathSalida.rstrip("*/")
-    pathSalida = pathSalida.strip(" ")
+    pathSalida = ""
     
     contenidoEntrada = ""
     for linea in archivo.readlines():
@@ -605,39 +591,10 @@ def analizar(contenido, path):
 
     ventana.mostrarRecorrido(listadoTokens)
     ventana.mostrarErrores(listadoErrores)
-    reporteErrores(listadoErrores)
+    ventana.reporteDeErroresTabla(listadoErrores, "/ErroresLexicosCSS.html")
     generarArchivoSalida(contenidoSalida, path)
 
 
 def generarArchivoSalida(contenido, path):
     archivo = open(path,"w")
     archivo.write(contenido)
-
-def reporteErrores(errores):
-    pathSalida = ventana.obtenerDirectorioActual() + "/ErroresLexicosCSS.html"
-    archivo = open(pathSalida,"w")
-    contenidoErrores = """<html>
-    <table class=\"egt\" border>
-    <tr>
-        <th> No. </th>
-        <th> Linea </th>
-        <th> Columna </th>
-        <th> Descripcion </th>
-    </tr>"""
-
-    iterador = 1
-
-    for error in errores:
-        contenidoErrores += "<tr>"
-        contenidoErrores += "<td> " + str(iterador) + " </td>"
-        contenidoErrores += "<td> " + str(error.fila) +" </td>"
-        contenidoErrores += "<td> " + str(error.columna) + " </td>"
-        contenidoErrores += "<td> El caracter " + error.error + " no pertenece al lenguaje </td>"
-        contenidoErrores += "</tr>"
-        iterador += 1
-
-    contenidoErrores += """</table>
-    </html>"""
-    archivo.write(contenidoErrores)
-    archivo.close()
-    ventana.abrirReporte(pathSalida)
