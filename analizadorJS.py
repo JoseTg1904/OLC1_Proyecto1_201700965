@@ -1,9 +1,8 @@
 import ventana
+import os
 
 from errorLexico import ErrorLexico
-from token import Token
-
-
+from tokenLexico import Token
 
 def obtenerContenidoJS(path):
     archivo = open(path,"r")
@@ -11,7 +10,6 @@ def obtenerContenidoJS(path):
     path1 = archivo.readline()
     path2 = archivo.readline()
     
-
     aux = path1 
     if aux.lower().find("pathl") != -1:
         pos = aux.lower().find("pathl")
@@ -31,6 +29,11 @@ def obtenerContenidoJS(path):
     analizar(contenidoEntrada, pathSalida)
 
 def analizar(contenido, path):
+    dot = "digraph AFD{\nrankdir=LR\n"
+    banderaComentarioIndividual = False
+    banderaComentarioMultilinea = False
+    banderaDecimal = False
+    banderaEntero = False
     contenidoSalida = ""
     lexemaAuxiliar = ""
     fila = 0
@@ -151,6 +154,16 @@ def analizar(contenido, path):
             if contenido[i] == "\n":
                 estado = 0
                 lexemaAuxiliar += contenido[i]
+                if banderaComentarioIndividual == False:
+                    dot += "0 [label=\"S0\" shape=\"circle\"]\n"
+                    dot += "1 [label=\"S1\" shape=\"circle\"]\n"
+                    dot += "2 [label=\"S2\" shape=\"circle\"]\n"
+                    dot += "3 [label=\"S3\" shape=\"doublecircle\"]\n"
+                    dot += "0 -> 1 [label=\"/\"]"
+                    dot += "1 -> 2 [label=\"/\"]"
+                    dot += "2 -> 2 [label=\"Todo\"]"
+                    dot += "2 -> 3 [label=\"Salto de linea\"]"
+                    banderaComentarioIndividual = True
                 ventana.pintar(lexemaAuxiliar,"comentario")
                 lexemaAuxiliar = ""
             else:
@@ -167,6 +180,17 @@ def analizar(contenido, path):
             if contenido[i] == "/":
                 estado = 0
                 lexemaAuxiliar += contenido[i]
+                if banderaComentarioMultilinea == False:
+                    dot += "5 [label=\"S1\" shape=\"circle\"]\n"
+                    dot += "6 [label=\"S4\" shape=\"circle\"]\n"
+                    dot += "7 [label=\"S5\" shape=\"circle\"]\n"
+                    dot += "8 [label=\"S6\" shape=\"doublecircle\"]\n"
+                    dot += "0 -> 5 [label=\"/\"]"
+                    dot += "5 -> 6 [label=\"*\"]"
+                    dot += "6 -> 6 [label=\"Todo\"]"
+                    dot += "6 -> 7 [label=\"*\"]"
+                    dot += "7 -> 8 [label=\"/\"]"
+                    banderaComentarioMultilinea = True
                 ventana.pintar(lexemaAuxiliar,"comentario")
                 lexemaAuxiliar = ""
             else:
@@ -317,6 +341,11 @@ def analizar(contenido, path):
                 lexemaAuxiliar += contenido[i]
             else:
                 estado = 0
+                if banderaEntero == False:
+                    dot += "13 [label=\"S7\" shape=\"doublecircle\"]\n"
+                    dot += "0 -> 13 [label=\"Numero\"]"
+                    dot += "13 -> 13 [label=\"Numero\"]"
+                    banderaEntero = True
                 ventana.pintar(lexemaAuxiliar,"intBoolean")
                 lexemaAuxiliar = ""
                 i -= 1
@@ -326,21 +355,43 @@ def analizar(contenido, path):
                 lexemaAuxiliar += contenido[i]
             else:
                 estado = 0
+                if banderaDecimal == False:
+                    dot += "10 [label=\"S7\" shape=\"circle\"]\n"
+                    dot += "11 [label=\"S8\" shape=\"doublecircle\"]\n"
+                    dot += "0 -> 10 [label=\"Numero\"]"
+                    dot += "10 -> 10 [label=\"Numero\"]"
+                    dot += "10 -> 11 [label=\"Punto\"]"
+                    dot += "11 -> 11 [label=\"Numero\"]"
+                    banderaDecimal = True
                 ventana.pintar(lexemaAuxiliar,"intBoolean")
                 lexemaAuxiliar = ""
                 i -= 1
         i += 1
 
+    dot += "15 [label=\"Inicio\" shape=\"plaintext\"]\n"
+    dot += "15 -> 0"
+    dot += "}"
+    graficoAFD(dot)
     reporteErrores(listadoErrores)
     generarArchivoSalida(contenidoSalida, path)
 
+def graficoAFD(entrada):
+    pathDot = ventana.obtenerDirectorioActual() + "/grafoJS.dot"
+    pathImagen = ventana.obtenerDirectorioActual() + "/grafoJS.png"
+    archivo = open(pathDot ,"w")
+    archivo.write(entrada)
+    archivo.close()
+    comando = "dot " + pathDot + " -Tpng -o " + pathImagen
+    os.system(comando)
+    ventana.abrirReporte(pathImagen)
 
 def generarArchivoSalida(contenido, path):
     archivo = open(path,"w")
     archivo.write(contenido)
 
 def reporteErrores(errores):
-    archivo = open("/home/jose/Escritorio/ErroresLexicosJS.html","w")
+    pathSalida = ventana.obtenerDirectorioActual() + "/ErroresLexicosJS.html"
+    archivo = open(pathSalida,"w")
     contenidoErrores = """<html>
     <table class=\"egt\" border>
     <tr>
@@ -364,3 +415,5 @@ def reporteErrores(errores):
     contenidoErrores += """</table>
     </html>"""
     archivo.write(contenidoErrores)
+    archivo.close()
+    ventana.abrirReporte(pathSalida)

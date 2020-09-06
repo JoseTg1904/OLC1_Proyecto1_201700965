@@ -2,7 +2,6 @@ from errorLexico import ErrorLexico
 
 import ventana
 
-
 def obtenerContenido(path):
     archivo = open(path,"r")
 
@@ -288,13 +287,13 @@ def analizar(contenido, path):
     reporteErrores(listadoErrores)
     generarArchivoSalida(contenidoSalida, path)
 
-
 def generarArchivoSalida(contenido, path):
     archivo = open(path,"w")
     archivo.write(contenido)
 
 def reporteErrores(errores):
-    archivo = open("/home/jose/Escritorio/ErroresLexicosHTML.html","w")
+    pathSalida = ventana.obtenerDirectorioActual() + "/ErroresLexicosHTML.html"
+    archivo = open(pathSalida,"w")
     contenidoErrores = """<html>
     <table class=\"egt\" border>
     <tr>
@@ -318,3 +317,5 @@ def reporteErrores(errores):
     contenidoErrores += """</table>
     </html>"""
     archivo.write(contenidoErrores)
+    archivo.close()
+    ventana.abrirReporte(pathSalida)

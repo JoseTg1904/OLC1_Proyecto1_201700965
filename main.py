@@ -1,3 +1,3 @@
-from ventana import mostrarVentana
+import ventana
 
-mostrarVentana()
+ventana.mostrarVentana()

@@ -1,4 +1,5 @@
 import os 
+import webbrowser
 
 from tkinter import *
 from tkinter import filedialog
@@ -10,8 +11,14 @@ from analizadorJS import obtenerContenidoJS
 #inicializacion del objeto que contiene la ventana
 ventana = Tk()
 
+#instancias de las cajas de texto de salida
 cajaDeTexto = Text(ventana,height = 52, width = 90)
 consola = Text(ventana,height = 52, width = 93)
+
+#variable que almacena el path de entrada y salida
+path = ""
+pathSalidaLinux = ""
+pathSalidaWindows = ""
 
 def mostrarVentana():
     #asignacion de tamaño de la ventana
@@ -24,11 +31,11 @@ def mostrarVentana():
     navbar = Menu(ventana)
     
     #agregando las opciones al menu
-    navbar.add_command(label = "Nuevo", command = limpiar)
+    navbar.add_command(label = "Nuevo", command = lambda: limpiar(1))
     navbar.add_command(label = "Abrir", command = abrirArchivo)
     navbar.add_command(label = "Guardar")
     navbar.add_command(label = "Guardar como")
-    navbar.add_command(label = "Ejecutar analisis")
+    navbar.add_command(label = "Ejecutar analisis", command = analizarArchivo)
     navbar.add_command(label = "Salir", command = ventana.quit)
     
     #asignando el menu a la ventana
@@ -46,31 +53,48 @@ def mostrarVentana():
     ventana.mainloop()
 
 def abrirArchivo():
+    global path
+
     #abriendo un seleccionador de archivos
     path = filedialog.askopenfilename(title = "Seleccione el archivo a analizar", filetypes = [("archivos de analisis","*.html *.js *.css *.rmt")]) 
-    if path != ():
+    
+    #validando que se haya escogido algun archivo para analizar
+    if path == ():
+        path = ""
+        messagebox.showerror("Error","Debe de seleccionar un archivo para ser analizado")
+
+def analizarArchivo():
+    global path
+
+    #validacion de la existencia del path de entrada
+    if path != "":
         #obtencion de la extension del archivo
         desicion = os.path.basename(path).split(".")
 
         #validacion de ejecucion del tipo de analizador correspondiente al archivo
         if desicion[1].lower() == "html":
-            limpiar()
+            limpiar(0)
             obtenerContenido(path)
         elif desicion[1].lower() == "css":
-            limpiar()
+            limpiar(0)
             obtenerContenidoCSS(path)
         elif desicion[1].lower() == "js":
-            limpiar()
+            limpiar(0)
             obtenerContenidoJS(path)
         elif desicion[1].lower() == "rmt":
-            limpiar()
+            limpiar(0)
             print("sintactico")
     else:
-        messagebox.showerror("Error","Debe de seleccionar un archivo para ser analizado")
+        messagebox.showerror("Error","Aun no se a seleccionado ningun archivo para analizar")
 
-def limpiar():
+def limpiar(tipo):
+    global path
+
     cajaDeTexto.delete("1.0","end")
     consola.delete("1.0","end")
+    
+    if tipo != 0:
+        path = ""
 
 def pintar(contenido, identificador):
     cajaDeTexto.insert(INSERT, contenido, identificador)
@@ -103,5 +127,14 @@ def mostrarErrores(listadoErrores):
         insercion = ""
         iterador += 1
 
-def obtenerPathLinux(linea1, linea2):
+def obtenerPathSalidaLinux(linea1, linea2):
     pass
+
+def obtnerPathSalidaWindows(linea1, linea2):
+    pass
+
+def obtenerDirectorioActual():
+    return os.path.dirname(os.path.abspath(__file__))
+
+def abrirReporte(path):
+    webbrowser.open(path)

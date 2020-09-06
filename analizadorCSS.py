@@ -1,7 +1,7 @@
 import ventana
 
 from errorLexico import ErrorLexico
-from token import Token
+from tokenLexico import Token
 
 def obtenerContenidoCSS(path):
     archivo = open(path,"r")
@@ -614,7 +614,8 @@ def generarArchivoSalida(contenido, path):
     archivo.write(contenido)
 
 def reporteErrores(errores):
-    archivo = open("/home/jose/Escritorio/ErroresLexicosCSS.html","w")
+    pathSalida = ventana.obtenerDirectorioActual() + "/ErroresLexicosCSS.html"
+    archivo = open(pathSalida,"w")
     contenidoErrores = """<html>
     <table class=\"egt\" border>
     <tr>
@@ -638,3 +639,5 @@ def reporteErrores(errores):
     contenidoErrores += """</table>
     </html>"""
     archivo.write(contenidoErrores)
+    archivo.close()
+    ventana.abrirReporte(pathSalida)
