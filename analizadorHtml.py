@@ -1,20 +1,18 @@
-from errorLexico import ErrorLexico
-
 import ventana
+
+from errorLexico import ErrorLexico
 
 def obtenerContenido(path):
     archivo = open(path,"r")
 
     ventana.obtenerPathSalidaLinux(archivo.readline(), archivo.readline())
-
-    pathSalida = ""
     
     contenidoEntrada = ""
     for linea in archivo.readlines():
         contenidoEntrada += linea
-    analizar(contenidoEntrada, pathSalida)
+    analizar(contenidoEntrada)
 
-def analizar(contenido, path):
+def analizar(contenido):
     contenidoSalida = ""
     lexemaAuxiliar = ""
     fila = 0

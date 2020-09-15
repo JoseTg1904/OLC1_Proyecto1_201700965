@@ -7,6 +7,7 @@ from tkinter import messagebox
 from analizadorHtml import obtenerContenido
 from analizadorCSS import obtenerContenidoCSS
 from analizadorJS import obtenerContenidoJS
+from analizadorOperaciones import obtenerContenidoOperaciones
 
 #inicializacion del objeto que contiene la ventana
 ventana = Tk()
@@ -18,6 +19,7 @@ consola = Text(ventana,height = 52, width = 93)
 #variable que almacena el path de entrada y salida
 path = ""
 pathSalidaLinux = ""
+nombreArchivo = ""
 
 def mostrarVentana():
     #asignacion de tamaño de la ventana
@@ -32,7 +34,7 @@ def mostrarVentana():
     #agregando las opciones al menu
     navbar.add_command(label = "Nuevo", command = lambda: limpiar(1))
     navbar.add_command(label = "Abrir", command = abrirArchivo)
-    navbar.add_command(label = "Guardar")
+    navbar.add_command(label = "Guardar", command = guardaArchivo)
     navbar.add_command(label = "Guardar como")
     navbar.add_command(label = "Ejecutar analisis", command = analizarArchivo)
     navbar.add_command(label = "Salir", command = ventana.quit)
@@ -61,9 +63,30 @@ def abrirArchivo():
     if path == ():
         path = ""
         messagebox.showerror("Error","Debe de seleccionar un archivo para ser analizado")
+    else:
+        archivo = open(path,"r")
+        contenidoArchivo = ""
+        for linea in archivo.readlines():
+            contenidoArchivo += linea
+        cajaDeTexto.insert(INSERT,contenidoArchivo)
+
+def guardaArchivo():
+    global path
+
+    if path != "":
+        textoCaja = cajaDeTexto.get("1.0",END)
+        archivoGuardar = open(path,"w")
+        archivoGuardar.write("")
+        archivoGuardar.write(textoCaja)
+        archivoGuardar.close()
+    else:
+        messagebox.showerror("Error","Aun no se a seleccionado ningun archivo para analizar")
+
+def guardarComoArchivo():
+    pass
 
 def analizarArchivo():
-    global path
+    global path, nombreArchivo
 
     #validacion de la existencia del path de entrada
     if path != "":
@@ -73,27 +96,33 @@ def analizarArchivo():
         #validacion de ejecucion del tipo de analizador correspondiente al archivo
         if desicion[1].lower() == "html":
             limpiar(0)
+            dividido = os.path.split(path)
+            nombreArchivo = dividido[1]
             obtenerContenido(path)
         elif desicion[1].lower() == "css":
             limpiar(0)
+            dividido = os.path.split(path)
+            nombreArchivo = dividido[1]
             obtenerContenidoCSS(path)
         elif desicion[1].lower() == "js":
             limpiar(0)
+            dividido = os.path.split(path)
+            nombreArchivo = dividido[1]
             obtenerContenidoJS(path)
         elif desicion[1].lower() == "rmt":
             limpiar(0)
-            print("sintactico")
+            obtenerContenidoOperaciones(path)
     else:
         messagebox.showerror("Error","Aun no se a seleccionado ningun archivo para analizar")
 
 def limpiar(tipo):
-    global path
+    global path, pathSalidaLinux, nombreArchivo
 
     cajaDeTexto.delete("1.0","end")
     consola.delete("1.0","end")
     
     if tipo != 0:
-        path = ""
+        path = pathSalidaLinux = nombreArchivo = ""
 
 def pintar(contenido, identificador):
     cajaDeTexto.insert(INSERT, contenido, identificador)
@@ -126,21 +155,31 @@ def mostrarErrores(listadoErrores):
         insercion = ""
         iterador += 1
 
-def obtenerPathSalidaLinux(linea1:str, linea2):
+def obtenerPathSalidaLinux(linea1, linea2):
     global pathSalidaLinux
 
     if linea1.lower().find("pathl") != -1:
-        pos = linea1.lower().find("/")
+        pos1 = linea1.lower().find("pathl")
+        linea1 = linea1[pos1: len(linea1)]
+        pos = linea1.find("/")
         pathSalidaLinux = linea1[pos:len(linea1)]
-        pathSalidaLinux = pathSalidaLinux.rstrip("\n")
-        pathSalidaLinux = pathSalidaLinux.rstrip("*/")
-        pathSalidaLinux = pathSalidaLinux.rstrip(" ")
+        iterador = len(pathSalidaLinux)-1
+        while True:
+            if pathSalidaLinux[iterador] == "/":
+                break
+            iterador -= 1
+        pathSalidaLinux = pathSalidaLinux[:iterador]
     else:
-        pos = linea2.lower().find("/")
+        pos1 = linea2.lower().find("pathl")
+        linea2 = linea2[pos1: len(linea2)]
+        pos = linea2.find("/")
         pathSalidaLinux = linea2[pos:len(linea2)]
-        pathSalidaLinux = pathSalidaLinux.rstrip("\n")
-        pathSalidaLinux = pathSalidaLinux.rstrip("*/")
-        pathSalidaLinux = pathSalidaLinux.rstrip(" ")
+        iterador = len(pathSalidaLinux)-1
+        while True:
+            if pathSalidaLinux[iterador] == "/":
+                break
+            iterador -= 1
+        pathSalidaLinux = pathSalidaLinux[:iterador]
 
 def obtenerDirectorioActual():
     return os.path.dirname(os.path.abspath(__file__))
@@ -175,6 +214,10 @@ def reporteDeErroresTabla(listado, tipo):
     abrirReporte(pathSalida)
 
 def guardarArchivoAnalizado(contenido):
+    global pathSalidaLinux, nombreArchivo
+    comando = "mkdir -p "+ pathSalidaLinux
+    os.system(comando)
+    pathSalidaLinux = os.path.join(pathSalidaLinux, nombreArchivo)
     archivo = open(pathSalidaLinux,"w")
     archivo.write(contenido)
     archivo.close()

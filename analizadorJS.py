@@ -137,6 +137,7 @@ def analizar(contenido, path):
                 estado = 0
                 i -= 1
                 ventana.pintar("/","operador")
+                contenidoSalida += lexemaAuxiliar
                 lexemaAuxiliar = ""
         elif estado == 2:
             if contenido[i] == "\n":
@@ -335,6 +336,7 @@ def analizar(contenido, path):
                     dot += "13 -> 13 [label=\"Numero\"]"
                     banderaEntero = True
                 ventana.pintar(lexemaAuxiliar,"intBoolean")
+                contenidoSalida += lexemaAuxiliar
                 lexemaAuxiliar = ""
                 i -= 1
         elif estado == 8:
@@ -343,15 +345,19 @@ def analizar(contenido, path):
                 lexemaAuxiliar += contenido[i]
             else:
                 estado = 0
-                if banderaDecimal == False:
-                    dot += "10 [label=\"S7\" shape=\"circle\"]\n"
-                    dot += "11 [label=\"S8\" shape=\"doublecircle\"]\n"
-                    dot += "0 -> 10 [label=\"Numero\"]"
-                    dot += "10 -> 10 [label=\"Numero\"]"
-                    dot += "10 -> 11 [label=\"Punto\"]"
-                    dot += "11 -> 11 [label=\"Numero\"]"
-                    banderaDecimal = True
-                ventana.pintar(lexemaAuxiliar,"intBoolean")
+                if lexemaAuxiliar[len(lexemaAuxiliar)-1].isdigit():
+                    contenidoSalida += lexemaAuxiliar
+                    if banderaDecimal == False:
+                        dot += "10 [label=\"S7\" shape=\"circle\"]\n"
+                        dot += "11 [label=\"S8\" shape=\"circle\"]\n"
+                        dot += "12 [label=\"S9\" shape=\"doublecircle\"]\n"
+                        dot += "0 -> 10 [label=\"Numero\"]"
+                        dot += "10 -> 10 [label=\"Numero\"]"
+                        dot += "10 -> 11 [label=\"Punto\"]"
+                        dot += "11 -> 16 [label=\"Numero\"]"
+                        dot += "16 -> 16 [label=\"Numero\"]"
+                        banderaDecimal = True
+                    ventana.pintar(lexemaAuxiliar,"intBoolean")
                 lexemaAuxiliar = ""
                 i -= 1
         i += 1

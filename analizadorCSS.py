@@ -568,9 +568,10 @@ def analizar(contenido, path):
                 lexemaAuxiliar += contenido[i]
                 recorrido += "6, "
             else:
-                listadoTokens.append(Token("tk_numeroDecimal", recorrido.strip(", "),lexemaAuxiliar))
-                contenidoSalida += lexemaAuxiliar
-                ventana.pintar(lexemaAuxiliar,"intBoolean")
+                if lexemaAuxiliar[len(lexemaAuxiliar)-1].isdigit():
+                    listadoTokens.append(Token("tk_numeroDecimal", recorrido.strip(", "),lexemaAuxiliar))
+                    contenidoSalida += lexemaAuxiliar
+                    ventana.pintar(lexemaAuxiliar,"intBoolean")
                 lexemaAuxiliar = ""
                 recorrido = ""
                 estado = 0
