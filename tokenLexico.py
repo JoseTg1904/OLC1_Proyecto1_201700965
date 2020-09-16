@@ -11,3 +11,9 @@ class TokenParea:
         self.tipo = tipo
         self.valor = valor
         self.idP = idP
+
+class ResultadoSintactico:
+
+    def __init__(self, operacion, resultado):
+        self.operacion = operacion
+        self.resultado = resultado

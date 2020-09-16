@@ -1,4 +1,10 @@
-from tokenLexico import TokenParea
+from tokenLexico import TokenParea, ResultadoSintactico
+import ventana
+
+indiceParea = 0
+tokenPareaActual = TokenParea("", "", 0)
+estadoOperacion = True
+listadoTokens = []
 
 def obtenerContenidoOperaciones(path):
     archivo = open(path,"r")
@@ -8,6 +14,9 @@ def obtenerContenidoOperaciones(path):
     analizarLexico(contenidoEntrada)
 
 def analizarLexico(contenido):
+    global listadoTokens, indiceParea, estadoOperacion
+    resultados = []
+
     sinSaltos = contenido.split("\n")
     for j in range(0, len(sinSaltos)-1):
         i = 0
@@ -47,6 +56,11 @@ def analizarLexico(contenido):
                 if operacion[i].isdigit():
                     estado = 1
                     lexemaAuxiliar += operacion[i]
+                    if i == len(operacion)-1:
+                        if lexemaAuxiliar[len(lexemaAuxiliar)-1].isdigit():
+                            listadoTokens.append(TokenParea("tk_NumeroEntero", lexemaAuxiliar, 6))
+                            lexemaAuxiliar = ""
+                            estado = 0        
                 elif operacion[i] == ".":
                     estado = 2
                     lexemaAuxiliar += operacion[i]
@@ -59,6 +73,11 @@ def analizarLexico(contenido):
                 if operacion[i].isdigit():
                     lexemaAuxiliar += operacion[i]
                     estado = 2
+                    if i == len(operacion)-1:
+                        if lexemaAuxiliar[len(lexemaAuxiliar)-1].isdigit():
+                            listadoTokens.append(TokenParea("tk_NumeroDecimal", lexemaAuxiliar, 7))
+                            lexemaAuxiliar = ""
+                            estado = 0    
                 else:
                     if lexemaAuxiliar[len(lexemaAuxiliar)-1].isdigit():
                         listadoTokens.append(TokenParea("tk_NumeroDecimal", lexemaAuxiliar, 7))
@@ -69,18 +88,126 @@ def analizarLexico(contenido):
                 if operacion[i].isdigit() or operacion[i].isalpha():
                     lexemaAuxiliar += operacion[i]
                     estado = 3
+                    if i == len(operacion)-1:
+                        if lexemaAuxiliar[len(lexemaAuxiliar)-1].isdigit() or lexemaAuxiliar[len(lexemaAuxiliar)-1].isalpha() :
+                            listadoTokens.append(TokenParea("tk_ID", lexemaAuxiliar, 8))
+                            lexemaAuxiliar = ""
+                            estado = 0    
                 else:
                     listadoTokens.append(TokenParea("tk_ID", lexemaAuxiliar, 8))
                     i -= 1
                     lexemaAuxiliar = ""
                     estado = 0
             i += 1
-        i = 0
-        estado = 0
-        lexemaAuxiliar = ""
-        #mandar al analisis sintactico
-        for a in listadoTokens:
-            print(a.tipo+" "+a.valor+" "+str(a.idP))
-        listadoTokens.clear()
-        for a in listadoTokens:
-            print(a.tipo+" "+a.valor+" "+str(a.idP))
+        indiceParea = 0
+        estadoOperacion = True
+        if len(listadoTokens) > 0:
+            analizadorSintactico()
+            resultados.append(ResultadoSintactico(sinSaltos[j], estadoOperacion))
+    
+    reporteSintactico(resultados)
+
+def reporteSintactico(listaResultados):
+    pathSalida = ventana.obtenerDirectorioActual() + "/Operaciones.html"
+    archivo = open(pathSalida,"w")
+    contenidoErrores = """<html>
+    <table class=\"egt\" border>
+    <tr>
+        <th> No. </th>
+        <th> Operacion </th>
+        <th> Resultado </th>
+    </tr>"""
+
+    iterador = 1
+
+    for error in listaResultados:
+        contenidoErrores += "<tr>"
+        contenidoErrores += "<td> " + str(iterador) + " </td>"
+        contenidoErrores += "<td> " + str(error.operacion) +" </td>"
+        contenidoErrores += "<td> " + str(error.resultado) + " </td>"
+        contenidoErrores += "</tr>"
+        iterador += 1
+
+    contenidoErrores += """</table>
+    </html>"""
+    archivo.write(contenidoErrores)
+    archivo.close()
+    ventana.abrirReporte(pathSalida)
+
+def analizadorSintactico():
+    """
+    A -> B A'
+    A' -> + B A' | - B A' | EPSILON
+    B -> C B'
+    B' -> * C B' | / C B' | EPSILON
+    C -> (A) | ID | NUMERO | NUMERODECIMAL
+    """
+    global listadoTokens, tokenPareaActual
+    tokenPareaActual = listadoTokens[0]
+    prodA()
+
+def prodA():
+    if estadoOperacion:
+        prodB()
+        prodAP()
+
+def prodAP():
+    if estadoOperacion:
+        if tokenPareaActual.idP == 2:
+            validacionParea(2)
+            prodB()
+            prodAP()
+        #signo menos
+        elif tokenPareaActual.idP == 3:
+            validacionParea(3)
+            prodB()
+            prodAP()
+
+def prodB():
+    if estadoOperacion:
+        prodC()
+        prodBP()
+
+def prodBP():
+    if estadoOperacion:
+        #signo por
+        if tokenPareaActual.idP == 4:
+            validacionParea(4)
+            prodC()
+            prodBP()
+        #signo division
+        elif tokenPareaActual.idP == 5:
+            validacionParea(5)
+            prodC()
+            prodBP()
+
+def prodC():
+    if estadoOperacion:
+        if tokenPareaActual.idP == 0:
+            #parentesis que abre
+            validacionParea(0)
+            prodA()
+            #parentesis que cierra
+            validacionParea(1)
+            #numero entero
+        elif tokenPareaActual.idP == 6:
+            validacionParea(6)
+        #numero decimal
+        elif tokenPareaActual.idP == 7:
+            validacionParea(7)
+        #identificador
+        elif tokenPareaActual.idP == 8:
+            validacionParea(8)
+        #error
+        else:
+            validacionParea(-1)
+
+def validacionParea(idParea):
+    global tokenPareaActual, indiceParea, estadoOperacion, listadoTokens
+
+    if idParea == tokenPareaActual.idP:
+        indiceParea += 1
+        if indiceParea < len(listadoTokens):
+            tokenPareaActual = listadoTokens[indiceParea]
+    else:
+        estadoOperacion = False

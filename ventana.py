@@ -35,7 +35,7 @@ def mostrarVentana():
     navbar.add_command(label = "Nuevo", command = lambda: limpiar(1))
     navbar.add_command(label = "Abrir", command = abrirArchivo)
     navbar.add_command(label = "Guardar", command = guardaArchivo)
-    navbar.add_command(label = "Guardar como")
+    navbar.add_command(label = "Guardar como", command = guardarComoArchivo)
     navbar.add_command(label = "Ejecutar analisis", command = analizarArchivo)
     navbar.add_command(label = "Salir", command = ventana.quit)
     
@@ -83,7 +83,14 @@ def guardaArchivo():
         messagebox.showerror("Error","Aun no se a seleccionado ningun archivo para analizar")
 
 def guardarComoArchivo():
-    pass
+    archivoGuardarComo = filedialog.asksaveasfile(mode='w')
+    if archivoGuardarComo is None: # asksaveasfile return `None` if dialog closed with "cancel".
+        messagebox.showerror("Error","Debe de llenar los campos correspondientes para guardar el archivo")
+        return
+    textoCaja = cajaDeTexto.get("1.0", END)
+    archivoGuardarComo.write(textoCaja)
+    archivoGuardarComo.close()
+    messagebox.showinfo("Anuncio", "Se ha guardado el nuevo archivo exitosamente")
 
 def analizarArchivo():
     global path, nombreArchivo
@@ -112,8 +119,9 @@ def analizarArchivo():
         elif desicion[1].lower() == "rmt":
             limpiar(0)
             obtenerContenidoOperaciones(path)
+            messagebox.showinfo("Anuncio", "Se han terminado de analizar las operaciones aritmeticas")
     else:
-        messagebox.showerror("Error","Aun no se a seleccionado ningun archivo para analizar")
+        messagebox.showerror("Error", "Aun no se a seleccionado ningun archivo para analizar")
 
 def limpiar(tipo):
     global path, pathSalidaLinux, nombreArchivo
