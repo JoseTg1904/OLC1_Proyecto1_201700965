@@ -2,6 +2,7 @@ from tokenLexico import TokenParea, ResultadoSintactico
 import ventana
 
 indiceParea = 0
+contadorParentesis = 0
 tokenPareaActual = TokenParea("", "", 0)
 estadoOperacion = True
 listadoTokens = []
@@ -14,7 +15,7 @@ def obtenerContenidoOperaciones(path):
     analizarLexico(contenidoEntrada)
 
 def analizarLexico(contenido):
-    global listadoTokens, indiceParea, estadoOperacion
+    global listadoTokens, indiceParea, estadoOperacion, contadorParentesis
     resultados = []
 
     sinSaltos = contenido.split("\n")
@@ -102,7 +103,10 @@ def analizarLexico(contenido):
         indiceParea = 0
         estadoOperacion = True
         if len(listadoTokens) > 0:
+            print(sinSaltos[j])
             analizadorSintactico()
+            if indiceParea != len(listadoTokens):
+                estadoOperacion = False
             resultados.append(ResultadoSintactico(sinSaltos[j], estadoOperacion))
     
     reporteSintactico(resultados)
@@ -134,8 +138,10 @@ def reporteSintactico(listaResultados):
     archivo.close()
     ventana.abrirReporte(pathSalida)
 
+#metodo inicial que llama a la produccion inicial de la gramatica
 def analizadorSintactico():
     """
+    gramatica para operaciones aritmeticas basicas, ya sin recursividad por la izquierda
     A -> B A'
     A' -> + B A' | - B A' | EPSILON
     B -> C B'
@@ -146,13 +152,16 @@ def analizadorSintactico():
     tokenPareaActual = listadoTokens[0]
     prodA()
 
+#metodos recursivos que simulan las producciones de la gramatica
 def prodA():
-    if estadoOperacion:
+    print("produccion A")
+    if tokenPareaActual != None:
         prodB()
         prodAP()
 
 def prodAP():
-    if estadoOperacion:
+    print("produccion AP")
+    if tokenPareaActual != None:
         if tokenPareaActual.idP == 2:
             validacionParea(2)
             prodB()
@@ -164,12 +173,15 @@ def prodAP():
             prodAP()
 
 def prodB():
-    if estadoOperacion:
+    print("produccion B")
+    if tokenPareaActual != None:
         prodC()
         prodBP()
 
 def prodBP():
-    if estadoOperacion:
+    print("produccion BP")
+
+    if tokenPareaActual != None:
         #signo por
         if tokenPareaActual.idP == 4:
             validacionParea(4)
@@ -182,7 +194,8 @@ def prodBP():
             prodBP()
 
 def prodC():
-    if estadoOperacion:
+    print("produccion C")
+    if tokenPareaActual != None:
         if tokenPareaActual.idP == 0:
             #parentesis que abre
             validacionParea(0)
@@ -202,12 +215,18 @@ def prodC():
         else:
             validacionParea(-1)
 
+#metodo de parea, el cual realiza la validacion del terminal que proviene de los metodos recursivos
 def validacionParea(idParea):
-    global tokenPareaActual, indiceParea, estadoOperacion, listadoTokens
-
-    if idParea == tokenPareaActual.idP:
-        indiceParea += 1
-        if indiceParea < len(listadoTokens):
-            tokenPareaActual = listadoTokens[indiceParea]
-    else:
-        estadoOperacion = False
+    global tokenPareaActual, indiceParea, estadoOperacion, listadoTokens, contadorParentesis
+    
+    if tokenPareaActual != None:
+        print("produccion Parea ", tokenPareaActual.valor, indiceParea)
+        if idParea != tokenPareaActual.idP:
+            estadoOperacion = False
+            tokenPareaActual = None
+        else:
+            indiceParea += 1
+            if indiceParea < len(listadoTokens):
+                tokenPareaActual = listadoTokens[indiceParea]
+            else:
+                tokenPareaActual = None

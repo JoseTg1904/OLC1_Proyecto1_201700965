@@ -257,7 +257,7 @@ def analizar(contenido):
                 estado = 3
                 lexemaAuxiliar += contenido[i]
         elif estado == 4:
-            if contenido[i] == "\"" or contenido[i] == "\'":
+            if contenido[i] == "\"" or contenido[i] == "\'" or contenido[i] == "‘" or contenido[i] == "“":
                 estado = 0
                 contenidoSalida += lexemaAuxiliar
                 contenidoSalida += contenido[i]

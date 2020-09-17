@@ -16,14 +16,23 @@ ventana = Tk()
 cajaDeTexto = Text(ventana,height = 52, width = 90)
 consola = Text(ventana,height = 52, width = 93)
 
+#haciendo que la consola sea unicamente en modo de lectura
+consola.configure(state = "disabled")
+
 #variable que almacena el path de entrada y salida
 path = ""
 pathSalidaLinux = ""
 nombreArchivo = ""
 
 def mostrarVentana():
-    #asignacion de tamaño de la ventana
-    ventana.geometry("1500x900")
+    #tamaño de la ventana
+    anchuraVentana = 1500
+    alturaVentana = 905
+
+    #centrada de la ventana en la pantalla
+    posX = (ventana.winfo_screenwidth() - anchuraVentana)/2
+    posY = (ventana.winfo_screenheight() - alturaVentana)/2
+    ventana.geometry('%dx%d+%d+%d' % (anchuraVentana, alturaVentana, posX, posY))
 
     #asignacion del titulo de la ventana
     ventana.title("OLC Proyecto 1")
@@ -64,6 +73,7 @@ def abrirArchivo():
         path = ""
         messagebox.showerror("Error","Debe de seleccionar un archivo para ser analizado")
     else:
+        #si el archivo existe colocar su contenido en el text box
         archivo = open(path,"r")
         contenidoArchivo = ""
         for linea in archivo.readlines():
@@ -74,19 +84,24 @@ def guardaArchivo():
     global path
 
     if path != "":
+        #obtener el contenido del text box y reemplazarlo por el actual del archivo
         textoCaja = cajaDeTexto.get("1.0",END)
         archivoGuardar = open(path,"w")
         archivoGuardar.write("")
         archivoGuardar.write(textoCaja)
         archivoGuardar.close()
+        messagebox.showinfo("Anuncio", "Se han realizado los cambios en el archivo exitosamente")
     else:
-        messagebox.showerror("Error","Aun no se a seleccionado ningun archivo para analizar")
+        messagebox.showerror("Error","Debe de cargar un archivo previamente para poder modificarlo")
 
 def guardarComoArchivo():
-    archivoGuardarComo = filedialog.asksaveasfile(mode='w')
-    if archivoGuardarComo is None: # asksaveasfile return `None` if dialog closed with "cancel".
+    archivoGuardarComo = filedialog.asksaveasfile(mode = "w")
+    #validando que se haya seleccionado lo necesario para guardar el archivo
+    if archivoGuardarComo is None:
         messagebox.showerror("Error","Debe de llenar los campos correspondientes para guardar el archivo")
         return
+    
+    #obteniendo el conteniod del textbox y asignandolo al archivo
     textoCaja = cajaDeTexto.get("1.0", END)
     archivoGuardarComo.write(textoCaja)
     archivoGuardarComo.close()
@@ -126,14 +141,19 @@ def analizarArchivo():
 def limpiar(tipo):
     global path, pathSalidaLinux, nombreArchivo
 
+    #limpiando los text box por completo
     cajaDeTexto.delete("1.0","end")
     consola.delete("1.0","end")
     
+    #reiniciando los path para analizar un nuevo archivo
     if tipo != 0:
         path = pathSalidaLinux = nombreArchivo = ""
 
 def pintar(contenido, identificador):
+    #insertando el contenido a la text box
     cajaDeTexto.insert(INSERT, contenido, identificador)
+    
+    #reglas de colores dependiendo del tipo de token que es
     cajaDeTexto.tag_config('entreEtiquetas', foreground = "black")
     cajaDeTexto.tag_config('reservada', foreground = "red")
     cajaDeTexto.tag_config('variable', foreground = "green")
@@ -167,27 +187,40 @@ def obtenerPathSalidaLinux(linea1, linea2):
     global pathSalidaLinux
 
     if linea1.lower().find("pathl") != -1:
+        #obteniendo la posicion donde se encuentra el verificador que indica que es un path 
+        #de linux
         pos1 = linea1.lower().find("pathl")
+
+        #creando el substring nuevo que almacena la cadena del path linux
         linea1 = linea1[pos1: len(linea1)]
-        pos = linea1.find("/")
+        
+        #encontrando la posicion de la palabra output
+        pos = linea1.lower().find("output")
+        
+        #creando el nuevo substring que almacena la cadena del path de linux
         pathSalidaLinux = linea1[pos:len(linea1)]
+        
+        #recorriendo la cadena del path de forma inversa hasta encontrar una diagonal para limpiar
+        #de posibles errores
         iterador = len(pathSalidaLinux)-1
         while True:
             if pathSalidaLinux[iterador] == "/":
                 break
             iterador -= 1
-        pathSalidaLinux = pathSalidaLinux[:iterador]
+        
+        #asignando la nueva cadena limpia a la variable
+        pathSalidaLinux = os.path.join(obtenerDirectorioActual(), pathSalidaLinux[:iterador]) 
     else:
         pos1 = linea2.lower().find("pathl")
         linea2 = linea2[pos1: len(linea2)]
-        pos = linea2.find("/")
+        pos = linea2.find("output")
         pathSalidaLinux = linea2[pos:len(linea2)]
         iterador = len(pathSalidaLinux)-1
         while True:
             if pathSalidaLinux[iterador] == "/":
                 break
             iterador -= 1
-        pathSalidaLinux = pathSalidaLinux[:iterador]
+        pathSalidaLinux = os.path.join(obtenerDirectorioActual(), pathSalidaLinux[:iterador]) 
 
 def obtenerDirectorioActual():
     return os.path.dirname(os.path.abspath(__file__))
@@ -223,6 +256,7 @@ def reporteDeErroresTabla(listado, tipo):
 
 def guardarArchivoAnalizado(contenido):
     global pathSalidaLinux, nombreArchivo
+    #comando para crear todas las carpetas necesarias en linux
     comando = "mkdir -p "+ pathSalidaLinux
     os.system(comando)
     pathSalidaLinux = os.path.join(pathSalidaLinux, nombreArchivo)

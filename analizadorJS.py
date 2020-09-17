@@ -9,15 +9,14 @@ def obtenerContenidoJS(path):
 
     ventana.obtenerPathSalidaLinux(archivo.readline(), archivo.readline())
 
-    pathSalida = ""
-
     contenidoEntrada = ""
     for linea in archivo.readlines():
         contenidoEntrada += linea
-    analizar(contenidoEntrada, pathSalida)
+    analizar(contenidoEntrada)
 
-def analizar(contenido, path):
+def analizar(contenido):
     dot = "digraph AFD{\nrankdir=LR\n"
+    dot += "0 [label=\"S0\" shape=\"circle\"]\n"
     banderaComentarioIndividual = False
     banderaComentarioMultilinea = False
     banderaDecimal = False
@@ -143,15 +142,14 @@ def analizar(contenido, path):
             if contenido[i] == "\n":
                 estado = 0
                 lexemaAuxiliar += contenido[i]
-                if banderaComentarioIndividual == False:
-                    dot += "0 [label=\"S0\" shape=\"circle\"]\n"
+                if banderaComentarioIndividual == False: 
                     dot += "1 [label=\"S1\" shape=\"circle\"]\n"
                     dot += "2 [label=\"S2\" shape=\"circle\"]\n"
                     dot += "3 [label=\"S3\" shape=\"doublecircle\"]\n"
-                    dot += "0 -> 1 [label=\"/\"]"
-                    dot += "1 -> 2 [label=\"/\"]"
-                    dot += "2 -> 2 [label=\"Todo\"]"
-                    dot += "2 -> 3 [label=\"Salto de linea\"]"
+                    dot += "0 -> 1 [label=\"/\"]\n"
+                    dot += "1 -> 2 [label=\"/\"]\n"
+                    dot += "2 -> 2 [label=\"Todo\"]\n"
+                    dot += "2 -> 3 [label=\"Salto de linea\"]\n"
                     banderaComentarioIndividual = True
                 ventana.pintar(lexemaAuxiliar,"comentario")
                 lexemaAuxiliar = ""
@@ -170,15 +168,15 @@ def analizar(contenido, path):
                 estado = 0
                 lexemaAuxiliar += contenido[i]
                 if banderaComentarioMultilinea == False:
-                    dot += "5 [label=\"S1\" shape=\"circle\"]\n"
-                    dot += "6 [label=\"S4\" shape=\"circle\"]\n"
-                    dot += "7 [label=\"S5\" shape=\"circle\"]\n"
-                    dot += "8 [label=\"S6\" shape=\"doublecircle\"]\n"
-                    dot += "0 -> 5 [label=\"/\"]"
-                    dot += "5 -> 6 [label=\"*\"]"
-                    dot += "6 -> 6 [label=\"Todo\"]"
-                    dot += "6 -> 7 [label=\"*\"]"
-                    dot += "7 -> 8 [label=\"/\"]"
+                    dot += "5 [label=\"S4\" shape=\"circle\"]\n"
+                    dot += "6 [label=\"S5\" shape=\"circle\"]\n"
+                    dot += "7 [label=\"S6\" shape=\"circle\"]\n"
+                    dot += "8 [label=\"S7\" shape=\"doublecircle\"]\n"
+                    dot += "0 -> 5 [label=\"/\"]\n"
+                    dot += "5 -> 6 [label=\"*\"]\n"
+                    dot += "6 -> 6 [label=\"Todo\"]\n"
+                    dot += "6 -> 7 [label=\"*\"]\n"
+                    dot += "7 -> 8 [label=\"/\"]\n"
                     banderaComentarioMultilinea = True
                 ventana.pintar(lexemaAuxiliar,"comentario")
                 lexemaAuxiliar = ""
@@ -331,9 +329,9 @@ def analizar(contenido, path):
             else:
                 estado = 0
                 if banderaEntero == False:
-                    dot += "13 [label=\"S7\" shape=\"doublecircle\"]\n"
-                    dot += "0 -> 13 [label=\"Numero\"]"
-                    dot += "13 -> 13 [label=\"Numero\"]"
+                    dot += "13 [label=\"S8\" shape=\"doublecircle\"]\n"
+                    dot += "0 -> 13 [label=\"Numero\"]\n"
+                    dot += "13 -> 13 [label=\"Numero\"]\n"
                     banderaEntero = True
                 ventana.pintar(lexemaAuxiliar,"intBoolean")
                 contenidoSalida += lexemaAuxiliar
@@ -348,14 +346,14 @@ def analizar(contenido, path):
                 if lexemaAuxiliar[len(lexemaAuxiliar)-1].isdigit():
                     contenidoSalida += lexemaAuxiliar
                     if banderaDecimal == False:
-                        dot += "10 [label=\"S7\" shape=\"circle\"]\n"
-                        dot += "11 [label=\"S8\" shape=\"circle\"]\n"
-                        dot += "12 [label=\"S9\" shape=\"doublecircle\"]\n"
-                        dot += "0 -> 10 [label=\"Numero\"]"
-                        dot += "10 -> 10 [label=\"Numero\"]"
-                        dot += "10 -> 11 [label=\"Punto\"]"
-                        dot += "11 -> 16 [label=\"Numero\"]"
-                        dot += "16 -> 16 [label=\"Numero\"]"
+                        dot += "10 [label=\"S9\" shape=\"circle\"]\n"
+                        dot += "11 [label=\"S10\" shape=\"circle\"]\n"
+                        dot += "12 [label=\"S11\" shape=\"doublecircle\"]\n"
+                        dot += "0 -> 10 [label=\"Numero\"]\n"
+                        dot += "10 -> 10 [label=\"Numero\"]\n"
+                        dot += "10 -> 11 [label=\"Punto\"]\n"
+                        dot += "11 -> 12 [label=\"Numero\"]\n"
+                        dot += "12 -> 12 [label=\"Numero\"]\n"
                         banderaDecimal = True
                     ventana.pintar(lexemaAuxiliar,"intBoolean")
                 lexemaAuxiliar = ""
@@ -363,7 +361,7 @@ def analizar(contenido, path):
         i += 1
 
     dot += "15 [label=\"Inicio\" shape=\"plaintext\"]\n"
-    dot += "15 -> 0"
+    dot += "15 -> 0\n"
     dot += "}"
 
     graficoAFD(dot)
@@ -371,11 +369,14 @@ def analizar(contenido, path):
     ventana.guardarArchivoAnalizado(contenidoSalida)
 
 def graficoAFD(entrada):
+    #rutas de salida que almacenan el dot y la imagen a generar
     pathDot = ventana.obtenerDirectorioActual() + "/grafoJS.dot"
     pathImagen = ventana.obtenerDirectorioActual() + "/grafoJS.png"
     archivo = open(pathDot ,"w")
     archivo.write(entrada)
     archivo.close()
+
+    #comando que realiza la compilacion del dot
     comando = "dot " + pathDot + " -Tpng -o " + pathImagen
     os.system(comando)
     ventana.abrirReporte(pathImagen)
