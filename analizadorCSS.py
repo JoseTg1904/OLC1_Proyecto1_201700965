@@ -35,7 +35,12 @@ def analizar(contenido, path):
                 columna = 0
                 contenidoSalida += contenido[i]
                 ventana.pintar("\n","otro")
-                listadoTokens.append(Token("tk_saltoLinea","0"," "))
+                listadoTokens.append(Token("tk_saltoLinea","0",""))
+            elif contenido[i] == "\t":
+                estado = 0
+                contenidoSalida += contenido[i]
+                ventana.pintar("\t", "otro")
+                listadoTokens.append(Token("tk_tabulador", "0", ""))
             elif contenido[i] == "/":
                 estado = 1
                 lexemaAuxiliar += contenido[i]

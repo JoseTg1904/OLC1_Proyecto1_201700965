@@ -100,11 +100,11 @@ def analizarLexico(contenido):
                     lexemaAuxiliar = ""
                     estado = 0
             i += 1
-        indiceParea = 0
-        estadoOperacion = True
+
         if len(listadoTokens) > 0:
             print(sinSaltos[j])
             analizadorSintactico()
+            print("indice", indiceParea, "longitud listado", len(listadoTokens))
             if indiceParea != len(listadoTokens):
                 estadoOperacion = False
             resultados.append(ResultadoSintactico(sinSaltos[j], estadoOperacion))
@@ -148,7 +148,9 @@ def analizadorSintactico():
     B' -> * C B' | / C B' | EPSILON
     C -> (A) | ID | NUMERO | NUMERODECIMAL
     """
-    global listadoTokens, tokenPareaActual
+    global listadoTokens, tokenPareaActual, indiceParea, estadoOperacion
+    indiceParea = 0
+    estadoOperacion = True
     tokenPareaActual = listadoTokens[0]
     prodA()
 
@@ -220,7 +222,7 @@ def validacionParea(idParea):
     global tokenPareaActual, indiceParea, estadoOperacion, listadoTokens, contadorParentesis
     
     if tokenPareaActual != None:
-        print("produccion Parea ", tokenPareaActual.valor, indiceParea)
+        print("produccion Parea ", tokenPareaActual.valor, tokenPareaActual.idP,"pre analisis",idParea)
         if idParea != tokenPareaActual.idP:
             estadoOperacion = False
             tokenPareaActual = None

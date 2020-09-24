@@ -1,0 +1,3 @@
+El analizador sintactico no funciona bien :c,
+tal vez seria mejor implementarlo por el metodo de la pila,
+en vez de utilizar parea y un predictivo recursivo

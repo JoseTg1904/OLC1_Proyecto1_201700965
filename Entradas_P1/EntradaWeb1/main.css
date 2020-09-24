@@ -1,0 +1,239 @@
+// PATHL: /home/user/desktop/output/assets/css/ 
+// PATHW: c:\user\desktop\output\assets\css\ 
+
+html, body, div, span, applet, object,
+iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
+pre, a, abbr, acronym, address, big, cite,
+code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b,
+u, i, center, dl, dt, dd, ol, ul, li, fieldset,
+form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td, article, aside,
+canvas, details, embed, figure, figcaption,
+footer, header, hgroup, menu, nav, output, ruby,
+section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/*
+	Dentro de un comentario multilinea
+	existen diversos caracteres que
+	pueda que no sean validos para el
+	lenguaje pero que son ignorados y
+	no deben ser reportados como errores
+
+	por ejemplo:
+
+	 $ ! ? ~ ñ á é í ó ú
+*/$
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+}
+
+mark {
+	background-color: transparent;
+	color: inherit;
+}
+
+input::moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
+
+input, select, textarea {
+	appearance: none;
+}
+
+body {
+	overflow-style: scrollbar;
+}
+
+html {
+	box-sizing: border-box;
+}
+
+body {
+	background: #242943;
+}
+
+body, input, select, textarea {
+	color: #ffffff;
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
+	font-size: 17pt;
+	font-weight: 300;
+	letter-spacing: 0.025em;
+	line-height: 1.65;
+}
+
+body, input, select, textarea {
+	font-size: 14pt;
+}
+
+
+body, input, select, textarea {
+	font-size: 12pt;
+}
+
+
+body, input, select, textarea {
+	font-size: 11pt;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #ffffff;
+	font-weight: 600;
+	line-height: 1.65;
+	margin: 0 0 1em 0;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+	color: inherit;
+	border-bottom: 0;
+}@
+
+h1 {
+	font-size: 2.5em;
+}
+
+h2 {
+	font-size: 1.75em;
+}
+
+h3 {
+	font-size: 1.35em;
+}
+
+h4 {
+	font-size: 1.1em;
+}
+
+h5 {
+	font-size: 0.9em;
+}
+
+h6 {
+	font-size: 0.7em;
+}
+
+sub {
+	font-size: 0.8em;
+	position: relative;
+	top: 0.5em;
+}
+
+sup {
+	font-size: 0.8em;
+	position: relative;
+	top: -0.5em;
+}
+
+code {
+	background: rgba(212, 212, 255, 0.035);
+	font-family: "Courier New", monospace;
+	font-size: 0.9em;
+	margin: 0 0.25em;
+	padding: 0.25em 0.65em;
+}<>?
+
+pre {
+	overflow-scrolling: touch;
+	font-family: "Courier New", monospace;
+	font-size: 0.9em;
+	margin: 0 0 2em 0;
+}
+
+pre code {
+	display: block;
+	line-height: 1.75;
+	padding: 1em 1.5em;
+	overflow-x: auto;
+}
+
+section.special, article.special {
+	text-align: center;
+}
+
+header.major {
+	width: -moz-max-content;
+	width: -webkit-max-content;
+	width: -ms-max-content;
+	width: max-content;
+	margin-bottom: 2em;
+}
+
+form {
+	margin: 0 0 2em 0;
+}?
+
+label {
+	color: #ffffff;
+	display: block;
+	font-size: 0.8em;
+	font-weight: 600;
+	letter-spacing: 0.25em;
+	margin: 0 0 1em 0;
+	text-transform: uppercase;
+}
+
+select,
+textarea {
+	appearance: none;
+	background: rgba(212, 212, 255, 0.035);
+	border: none;
+	border-radius: 0;
+	color: inherit;
+	display: block;
+	outline: 0;
+	padding: 0 1em;
+	text-decoration: none;
+	width: 100%;
+}
+
+select:invalid,
+textarea:invalid {
+	box-shadow: none;
+}~
+select:focus,
+textarea:focus {
+	border-color: #9bf1ff;
+	box-shadow: 0 0 0 2px #9bf1ff;
+}
+
+select {
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' preserveAspectRatio='none' viewBox='0 0 40 40'%3E%3Cpath d='M9.4,12.3l10.4,10.4l10.4-10.4c0.2-0.2,0.5-0.4,0.9-0.4c0.3,0,0.6,0.1,0.9,0.4l3.3,3.3c0.2,0.2,0.4,0.5,0.4,0.9 c0,0.4-0.1,0.6-0.4,0.9L20.7,31.9c-0.2,0.2-0.5,0.4-0.9,0.4c-0.3,0-0.6-0.1-0.9-0.4L4.3,17.3c-0.2-0.2-0.4-0.5-0.4-0.9 c0-0.4,0.1-0.6,0.4-0.9l3.3-3.3c0.2-0.2,0.5-0.4,0.9-0.4S9.1,12.1,9.4,12.3z' fill='rgba(212, 212, 255, 0.1)' /%3E%3C/svg%3E");
+	background-size: 1.25rem;
+	background-repeat: no-repeat;
+	background-position: calc(100% - 1rem) center;
+	height: 2.75em;
+	padding-right: 2.75em;
+	text-overflow: ellipsis;
+}
+
+select option {
+	color: #ffffff;
+	background: #242943;
+}
+
+select:focus::-ms-value {
+	background-color: transparent;
+}
+
+select::-ms-expand {
+	display: none;
+}
+
+#contact {
+	border-bottom: solid 1px rgba(212, 212, 255, 0.1);
+	overflow-x: hidden;
+}

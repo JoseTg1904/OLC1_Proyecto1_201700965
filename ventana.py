@@ -16,8 +16,8 @@ ventana = Tk()
 cajaDeTexto = Text(ventana,height = 52, width = 90)
 consola = Text(ventana,height = 52, width = 93)
 
-#haciendo que la consola sea unicamente en modo de lectura
-consola.configure(state = "disabled")
+#dejando de lectura la consola
+#consola.configure(state=DISABLED)
 
 #variable que almacena el path de entrada y salida
 path = ""
@@ -99,9 +99,6 @@ def guardarComoArchivo():
     #validando que se haya seleccionado lo necesario para guardar el archivo
     if archivoGuardarComo is None:
         messagebox.showerror("Error","Debe de llenar los campos correspondientes para guardar el archivo")
-        return
-    
-    #obteniendo el conteniod del textbox y asignandolo al archivo
     textoCaja = cajaDeTexto.get("1.0", END)
     archivoGuardarComo.write(textoCaja)
     archivoGuardarComo.close()
@@ -203,6 +200,7 @@ def obtenerPathSalidaLinux(linea1, linea2):
         #recorriendo la cadena del path de forma inversa hasta encontrar una diagonal para limpiar
         #de posibles errores
         iterador = len(pathSalidaLinux)-1
+            
         while True:
             if pathSalidaLinux[iterador] == "/":
                 break

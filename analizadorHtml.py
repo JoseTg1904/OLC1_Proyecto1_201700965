@@ -30,6 +30,10 @@ def analizar(contenido):
                 columna = 0
                 contenidoSalida += contenido[i]
                 ventana.pintar("\n","otro")
+            elif contenido[i] == "\t":
+                estado = 0
+                contenidoSalida += contenido[i]
+                ventana.pintar("\t", "otro")
             elif contenido[i] == "<":
                 estado = 0
                 contenidoSalida += contenido[i]
@@ -202,6 +206,8 @@ def analizar(contenido):
                     estado = 0
                     i -= 1
                 else:
+                    contenidoSalida += lexemaAuxiliar
+                    ventana.pintar(lexemaAuxiliar, "otro")
                     lexemaAuxiliar = ""
                     estado = 0
                     i -= 1
